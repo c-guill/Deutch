@@ -57,7 +57,12 @@ export default function App() {
       }
       setProgressMap(nextProgress);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to load data from Supabase.';
+      const message =
+        err instanceof Error
+          ? err.message
+          : typeof err === 'object' && err !== null && 'message' in err
+            ? String((err as { message: unknown }).message)
+            : 'Failed to load data from Supabase.';
       setError(message);
     } finally {
       setLoading(false);
