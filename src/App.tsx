@@ -118,11 +118,12 @@ export default function App() {
     });
   }, []);
 
-  const handleStartThemeLesson = (theme: Theme, mod?: Module) => {
+  const handleStartThemeLesson = (theme: Theme, mod?: Module, previousModuleIds: string[] = []) => {
     const exercises = buildSessionExercises({
       mode: 'theme',
       themeId: theme.id,
       moduleId: mod?.id,
+      previousModuleIds,
       allItems: items,
       progressMap,
       sessionSize: 10,
@@ -187,6 +188,9 @@ export default function App() {
           dueCount={dueCount}
           sentencePracticeCount={sentencePracticeCount}
           onSelectTheme={(theme) => setScreen({ view: 'intro', theme })}
+          onStartModule={(theme, mod, previousModuleIds) =>
+            handleStartThemeLesson(theme, mod, previousModuleIds)
+          }
           onStartReview={handleStartDueReview}
           onStartSentencePractice={handleStartSentencePractice}
           onRefresh={() => loadCurriculum(true)}
@@ -199,7 +203,17 @@ export default function App() {
           themeItems={items.filter((it) => it.theme_id === screen.theme.id)}
           progressMap={progressMap}
           onBack={() => setScreen({ view: 'map' })}
-          onStartLesson={(mod) => handleStartThemeLesson(screen.theme, mod)}
+          onStartLesson={(mod) => {
+            const sorted = modules
+              .filter((m) => m.theme_id === screen.theme.id)
+              .sort((a, b) => a.order_index - b.order_index);
+            const idx = mod ? sorted.findIndex((m) => m.id === mod.id) : -1;
+            handleStartThemeLesson(
+              screen.theme,
+              mod,
+              idx > 0 ? sorted.slice(0, idx).map((m) => m.id) : []
+            );
+          }}
         />
       ) : (
         <SessionRunner

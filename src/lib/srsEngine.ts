@@ -257,7 +257,10 @@ function buildGradedStep(params: {
   matchingCounter: { count: number };
 }): SessionExercise {
   const { item, progress, isReview, allItems, index, matchingCounter } = params;
-  const reps = progress?.repetitions ?? 0;
+  const storedReps = progress?.repetitions ?? 0;
+  // Words revisited from earlier modules (already introduced, e.g. after a lapse) go straight to
+  // consolidation (Cloze / Reorder) instead of a new discovery card.
+  const reps = storedReps === 0 && isReview && progress ? 1 : storedReps;
 
   if (reps === 0) {
     const peers4 = pickPeers(item, allItems, 4);
@@ -329,6 +332,7 @@ function scheduleWithDiscovery(
   entries.forEach((entry, idx) => {
     const progress = progressMap.get(entry.item.id);
     const reps = progress?.repetitions ?? 0;
+    const needsDiscovery = reps === 0 && !(entry.isReview && progress);
     const graded = buildGradedStep({
       item: entry.item,
       progress,
@@ -338,7 +342,7 @@ function scheduleWithDiscovery(
       matchingCounter,
     });
 
-    if (reps === 0) {
+    if (needsDiscovery) {
       newEntries.push({
         discovery: {
           id: `${entry.item.id}-discovery-${idx}`,
@@ -412,11 +416,21 @@ export function buildSessionExercises(params: {
   mode: 'theme' | 'review' | 'sentence_practice';
   themeId?: number;
   moduleId?: string;
+  /** Module ids (same theme) that precede `moduleId`, used for progressive re-mixing */
+  previousModuleIds?: string[];
   allItems: LearningItem[];
   progressMap: Map<string, UserProgress>;
   sessionSize?: number;
 }): SessionExercise[] {
-  const { mode, themeId, moduleId, allItems, progressMap, sessionSize = 10 } = params;
+  const {
+    mode,
+    themeId,
+    moduleId,
+    previousModuleIds = [],
+    allItems,
+    progressMap,
+    sessionSize = 10,
+  } = params;
   const now = Date.now();
 
   const isDue = (item: LearningItem): boolean => {
@@ -467,6 +481,59 @@ export function buildSessionExercises(params: {
       .slice(0, sessionSize);
 
     selected = dueItems.map((item) => ({ item, isReview: true }));
+  } else if (moduleId) {
+    // Module-scoped session (sub-modules of a theme)
+    const moduleItems = allItems.filter((it) => it.module_id === moduleId);
+    const previousSet = new Set(previousModuleIds);
+    const previousItems = allItems.filter((it) => it.module_id && previousSet.has(it.module_id));
+
+    const unseenOwn = shuffle(moduleItems.filter((it) => !progressMap.has(it.id)));
+    const dueOwn = shuffle(moduleItems.filter((it) => isDue(it)));
+    const restOwn = shuffle(moduleItems.filter((it) => progressMap.has(it.id) && !isDue(it)));
+    const ownPool = [...unseenOwn, ...dueOwn, ...restOwn];
+
+    if (previousItems.length === 0) {
+      // Module 1 of a theme: session is entirely about this module's words
+      selected = ownPool.slice(0, sessionSize).map((item) => ({ item, isReview: false }));
+    } else {
+      // Module N >= 2: ~65-70% current module, ~30-35% earlier modules of the same theme
+      const reviewTarget = Math.max(1, Math.round(sessionSize * 0.32));
+      const ownTarget = sessionSize - reviewTarget;
+
+      // Prefer words already seen (never test unseen words blindly), due first, then lowest repetitions
+      const seenPrevious = previousItems
+        .filter((it) => progressMap.has(it.id))
+        .sort((a, b) => {
+          const dueDiff = Number(isDue(b)) - Number(isDue(a));
+          if (dueDiff !== 0) return dueDiff;
+          const repDiff =
+            (progressMap.get(a.id)?.repetitions ?? 0) - (progressMap.get(b.id)?.repetitions ?? 0);
+          if (repDiff !== 0) return repDiff;
+          return Math.random() - 0.5;
+        });
+      const unseenPrevious = shuffle(previousItems.filter((it) => !progressMap.has(it.id)));
+
+      const chosenOwn = ownPool.slice(0, ownTarget);
+      const reviewPool = [...seenPrevious, ...unseenPrevious];
+      const chosenPrevious = reviewPool.slice(0, reviewTarget);
+
+      // If one pool is short, top up from the other so the session stays at sessionSize
+      const missing = sessionSize - chosenOwn.length - chosenPrevious.length;
+      let extra: LearningItem[] = [];
+      if (missing > 0) {
+        const usedIds = new Set([...chosenOwn, ...chosenPrevious].map((it) => it.id));
+        extra = [...ownPool.slice(ownTarget), ...reviewPool.slice(reviewTarget)]
+          .filter((it) => !usedIds.has(it.id))
+          .slice(0, missing);
+      }
+
+      const ownIds = new Set(moduleItems.map((it) => it.id));
+      selected = [
+        ...chosenOwn.map((item) => ({ item, isReview: false })),
+        ...chosenPrevious.map((item) => ({ item, isReview: true })),
+        ...extra.map((item) => ({ item, isReview: !ownIds.has(item.id) })),
+      ];
+    }
   } else {
     const themeItems = moduleId
       ? allItems.filter((it) => it.module_id === moduleId)

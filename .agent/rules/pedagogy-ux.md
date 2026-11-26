@@ -41,6 +41,14 @@ Concepteur pédagogique CECRL A1 et designer UX mobile-first inspiré de **Speex
 - **Session immersive** : en-tête avec bouton fermer et barre épaisse brillante, badge « 🔥 N in a row », tiroir de correction qui glisse depuis le bas (vert `#D7FFB8` si juste avec titre aléatoire « Ausgezeichnet! / Super! / Perfect! » et « +10 XP » ; rouge `#FFDFE0` si faux avec bonne réponse et `grammar_tip`), écran final `SessionComplete` (confettis, précision, XP, série, « Back to path »).
 - **Langue de l'interface** : tous les libellés ludiques restent en **anglais** (règle « zéro français » prioritaire) ; le contenu cible reste en allemand.
 
+## Sous-modules progressifs par thème (table `modules`)
+- Chaque thème est découpé en **sous-modules de 6 à 9 mots** (`modules` : `id`, `theme_id`, `order_index`, `title`, `description` ; `learning_items.module_id`), du plus basique au plus spécifique. Titres et descriptions en **anglais** (règle « zéro français »).
+- **Parcours (`ThemeMap`)** : chaque thème est une bannière de chapitre (titre, description, `X / Y words acquired`), suivie de ses modules en étapes circulaires sur le chemin sinueux (`"1. Drinks (7 words)"`, anneau de progression, infobulle « START » / « CONTINUE » sur le premier module non terminé). Un module est **complété** quand tous ses mots ont `repetitions >= 1`.
+- **Rebrassage progressif (`buildSessionExercises`, `previousModuleIds`)** :
+  - **Module 1** d'un thème : la session porte uniquement sur les mots du module (`DiscoveryCard` pour les mots jamais vus, puis reconnaissance).
+  - **Module N ≥ 2** : ~65–70 % de mots du Module N (priorité aux mots nouveaux, puis dus) + ~30–35 % de mots des Modules 1 à N-1 **du même thème** (priorité aux mots dus, puis aux moins de `repetitions` ; les mots jamais vus ne sont repris qu'en dernier recours).
+  - Les mots repris des modules précédents et déjà introduits passent par la **consolidation** (`ClozeExercise`, `ReorderExercise`, `TypingExercise`) et jamais par une nouvelle carte de découverte.
+
 ## Contraintes UX Mobile-First
 - **Ergonomie au pouce** : design conçu pour smartphone (`max-w-[480px]` centré sur desktop, `min-h-[100dvh]`, gros boutons tactiles >= 48px de hauteur, aucune barre latérale).
 - **Clavier allemand** : barre dédiée aux caractères spéciaux allemands (`ä`, `ö`, `ü`, `ß`, plus majuscules si pertinent) affichée juste au-dessus du clavier virtuel lors des exercices d'écriture directe.
