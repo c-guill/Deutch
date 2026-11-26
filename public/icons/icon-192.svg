@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <rect width="192" height="192" rx="40" fill="#0f172a"/>
+  <rect x="24" y="34" width="144" height="10" rx="5" fill="#1e293b"/>
+  <rect x="24" y="34" width="48" height="10" rx="5" fill="#0f172a"/>
+  <rect x="24" y="34" width="144" height="10" rx="5" fill="url(#flag)"/>
+  <defs>
+    <linearGradient id="flag" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#111827"/>
+      <stop offset="33%" stop-color="#111827"/>
+      <stop offset="33%" stop-color="#dc2626"/>
+      <stop offset="66%" stop-color="#dc2626"/>
+      <stop offset="66%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#facc15"/>
+    </linearGradient>
+  </defs>
+  <text x="96" y="114" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="800" fill="#f8fafc">DE</text>
+  <text x="96" y="154" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="700" fill="#38bdf8">A1</text>
+</svg>

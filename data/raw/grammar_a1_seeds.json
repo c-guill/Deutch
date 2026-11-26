@@ -1,0 +1,702 @@
+[
+  {
+    "german": "ich",
+    "translation": "I",
+    "item_type": "pronoun",
+    "article": null,
+    "plural": null,
+    "category": "personal_pronouns",
+    "notes": "Personal pronoun subject (nominative, 1st person singular)"
+  },
+  {
+    "german": "du",
+    "translation": "you (informal singular)",
+    "item_type": "pronoun",
+    "article": null,
+    "plural": null,
+    "category": "personal_pronouns",
+    "notes": "Personal pronoun subject (nominative, 2nd person informal singular)"
+  },
+  {
+    "german": "er",
+    "translation": "he",
+    "item_type": "pronoun",
+    "article": null,
+    "plural": null,
+    "category": "personal_pronouns",
+    "notes": "Personal pronoun subject (nominative, 3rd person singular masculine)"
+  },
+  {
+    "german": "sie (Sg.)",
+    "translation": "she",
+    "item_type": "pronoun",
+    "article": null,
+    "plural": null,
+    "category": "personal_pronouns",
+    "notes": "Personal pronoun subject (nominative, 3rd person singular feminine)"
+  },
+  {
+    "german": "es",
+    "translation": "it",
+    "item_type": "pronoun",
+    "article": null,
+    "plural": null,
+    "category": "personal_pronouns",
+    "notes": "Personal pronoun subject (nominative, 3rd person singular neuter)"
+  },
+  {
+    "german": "wir",
+    "translation": "we",
+    "item_type": "pronoun",
+    "article": null,
+    "plural": null,
+    "category": "personal_pronouns",
+    "notes": "Personal pronoun subject (nominative, 1st person plural)"
+  },
+  {
+    "german": "ihr",
+    "translation": "you (informal plural)",
+    "item_type": "pronoun",
+    "article": null,
+    "plural": null,
+    "category": "personal_pronouns",
+    "notes": "Personal pronoun subject (nominative, 2nd person informal plural)"
+  },
+  {
+    "german": "sie (Pl.)",
+    "translation": "they",
+    "item_type": "pronoun",
+    "article": null,
+    "plural": null,
+    "category": "personal_pronouns",
+    "notes": "Personal pronoun subject (nominative, 3rd person plural)"
+  },
+  {
+    "german": "Sie",
+    "translation": "you (formal)",
+    "item_type": "pronoun",
+    "article": null,
+    "plural": null,
+    "category": "personal_pronouns",
+    "notes": "Formal polite pronoun, always capitalized"
+  },
+  {
+    "german": "mich",
+    "translation": "me (accusative)",
+    "item_type": "pronoun",
+    "article": null,
+    "plural": null,
+    "category": "personal_pronouns",
+    "notes": "Direct object personal pronoun in the accusative (from ich)"
+  },
+  {
+    "german": "dich",
+    "translation": "you (accusative informal)",
+    "item_type": "pronoun",
+    "article": null,
+    "plural": null,
+    "category": "personal_pronouns",
+    "notes": "Direct object personal pronoun in the accusative (from du)"
+  },
+  {
+    "german": "ihn",
+    "translation": "him (accusative)",
+    "item_type": "pronoun",
+    "article": null,
+    "plural": null,
+    "category": "personal_pronouns",
+    "notes": "Direct object personal pronoun in the accusative (from er)"
+  },
+  {
+    "german": "uns",
+    "translation": "us (accusative)",
+    "item_type": "pronoun",
+    "article": null,
+    "plural": null,
+    "category": "personal_pronouns",
+    "notes": "Direct object personal pronoun in the accusative (from wir)"
+  },
+  {
+    "german": "euch",
+    "translation": "you all (accusative informal)",
+    "item_type": "pronoun",
+    "article": null,
+    "plural": null,
+    "category": "personal_pronouns",
+    "notes": "Direct object personal pronoun in the accusative (from ihr)"
+  },
+
+  {
+    "german": "ich bin",
+    "translation": "I am",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "conjugation_sein",
+    "notes": "Present tense of sein (to be) — 1st person singular"
+  },
+  {
+    "german": "du bist",
+    "translation": "you are (informal)",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "conjugation_sein",
+    "notes": "Present tense of sein (to be) — 2nd person singular"
+  },
+  {
+    "german": "er/sie/es ist",
+    "translation": "he / she / it is",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "conjugation_sein",
+    "notes": "Present tense of sein (to be) — 3rd person singular"
+  },
+  {
+    "german": "wir sind",
+    "translation": "we are",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "conjugation_sein",
+    "notes": "Present tense of sein (to be) — 1st person plural"
+  },
+  {
+    "german": "ihr seid",
+    "translation": "you are (informal plural)",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "conjugation_sein",
+    "notes": "Present tense of sein (to be) — 2nd person plural"
+  },
+  {
+    "german": "sie/Sie sind",
+    "translation": "they are / you are (formal)",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "conjugation_sein",
+    "notes": "Present tense of sein (to be) — 3rd person plural & formal"
+  },
+
+  {
+    "german": "ich habe",
+    "translation": "I have",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "conjugation_haben",
+    "notes": "Present tense of haben (to have) — 1st person singular"
+  },
+  {
+    "german": "du hast",
+    "translation": "you have (informal)",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "conjugation_haben",
+    "notes": "Present tense of haben (to have) — 2nd person singular (drops the b)"
+  },
+  {
+    "german": "er/sie/es hat",
+    "translation": "he / she / it has",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "conjugation_haben",
+    "notes": "Present tense of haben (to have) — 3rd person singular (drops the b)"
+  },
+  {
+    "german": "wir haben",
+    "translation": "we have",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "conjugation_haben",
+    "notes": "Present tense of haben (to have) — 1st person plural"
+  },
+  {
+    "german": "ihr habt",
+    "translation": "you have (informal plural)",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "conjugation_haben",
+    "notes": "Present tense of haben (to have) — 2nd person plural"
+  },
+  {
+    "german": "sie/Sie haben",
+    "translation": "they have / you have (formal)",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "conjugation_haben",
+    "notes": "Present tense of haben (to have) — 3rd person plural & formal"
+  },
+
+  {
+    "german": "ich heiße",
+    "translation": "my name is / I am called",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "key_verbs",
+    "notes": "Present tense of heißen (du heißt, er heißt)"
+  },
+  {
+    "german": "du sprichst",
+    "translation": "you speak",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "key_verbs",
+    "notes": "Stem-changing verb sprechen: vowel change e -> i for du/er/sie/es"
+  },
+  {
+    "german": "er fährt",
+    "translation": "he drives / he goes (by vehicle)",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "key_verbs",
+    "notes": "Stem-changing verb fahren: vowel change a -> ä for du/er/sie/es"
+  },
+  {
+    "german": "sie liest",
+    "translation": "she reads",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "key_verbs",
+    "notes": "Stem-changing verb lesen: vowel change e -> ie for du/er/sie/es"
+  },
+  {
+    "german": "ich möchte",
+    "translation": "I would like",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "key_verbs",
+    "notes": "Polite form of mögen (no -t in 3rd person singular: er möchte)"
+  },
+  {
+    "german": "ich kann",
+    "translation": "I can / I am able to",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "key_verbs",
+    "notes": "Modal verb können: 1st and 3rd person singular are identical (ich/er kann)"
+  },
+  {
+    "german": "ich muss",
+    "translation": "I must / I have to",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "key_verbs",
+    "notes": "Modal verb müssen: expresses obligation (ich/er muss, wir müssen)"
+  },
+  {
+    "german": "ich will",
+    "translation": "I want to",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "key_verbs",
+    "notes": "Modal verb wollen: expresses intention/desire (ich/er will, wir wollen)"
+  },
+  {
+    "german": "ich darf",
+    "translation": "I am allowed to / I may",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "key_verbs",
+    "notes": "Modal verb dürfen: expresses permission or prohibition (ich/er darf)"
+  },
+  {
+    "german": "ich kaufe ein",
+    "translation": "I go shopping",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "key_verbs",
+    "notes": "Separable verb einkaufen: the prefix ein- moves to the end of the clause"
+  },
+  {
+    "german": "ich stehe auf",
+    "translation": "I get up",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "key_verbs",
+    "notes": "Separable verb aufstehen: the prefix auf- moves to the end of the clause"
+  },
+
+  {
+    "german": "der (Nominativ)",
+    "translation": "the (masculine nominative)",
+    "item_type": "grammar",
+    "article": "der",
+    "plural": null,
+    "category": "articles_nom_acc",
+    "notes": "Definite article for masculine singular subjects (nominative)"
+  },
+  {
+    "german": "die (Nominativ)",
+    "translation": "the (feminine & plural nominative)",
+    "item_type": "grammar",
+    "article": "die",
+    "plural": null,
+    "category": "articles_nom_acc",
+    "notes": "Definite article for feminine singular and all plural nouns in the nominative"
+  },
+  {
+    "german": "das (Nominativ)",
+    "translation": "the (neuter nominative)",
+    "item_type": "grammar",
+    "article": "das",
+    "plural": null,
+    "category": "articles_nom_acc",
+    "notes": "Definite article for neuter singular nouns in the nominative"
+  },
+  {
+    "german": "den (Akkusativ)",
+    "translation": "the (masculine accusative)",
+    "item_type": "grammar",
+    "article": "der",
+    "plural": null,
+    "category": "articles_nom_acc",
+    "notes": "Only masculine changes in the accusative case: der -> den"
+  },
+  {
+    "german": "ein (Nominativ)",
+    "translation": "a / an (masculine or neuter nominative)",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "articles_nom_acc",
+    "notes": "Indefinite article for masculine and neuter singular nouns in the nominative"
+  },
+  {
+    "german": "eine (Nominativ/Akkusativ)",
+    "translation": "a / an (feminine nominative/accusative)",
+    "item_type": "grammar",
+    "article": "die",
+    "plural": null,
+    "category": "articles_nom_acc",
+    "notes": "Indefinite feminine article (identical in nominative and accusative)"
+  },
+  {
+    "german": "einen (Akkusativ)",
+    "translation": "a / an (masculine accusative)",
+    "item_type": "grammar",
+    "article": "der",
+    "plural": null,
+    "category": "articles_nom_acc",
+    "notes": "Indefinite masculine article in the accusative case: ein -> einen"
+  },
+
+  {
+    "german": "nicht",
+    "translation": "not (negates verbs, adjectives, adverbs)",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "negation",
+    "notes": "Used to negate verbs, adjectives, adverbs, or nouns with definite articles"
+  },
+  {
+    "german": "kein",
+    "translation": "no / not a (masculine/neuter nominative)",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "negation",
+    "notes": "Negates nouns with ein or no article (e.g. Das ist kein Problem)"
+  },
+  {
+    "german": "keine",
+    "translation": "no / not a (feminine & plural)",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "negation",
+    "notes": "Negates feminine singular or plural nouns (e.g. Ich habe keine Zeit)"
+  },
+  {
+    "german": "keinen",
+    "translation": "no / not a (masculine accusative)",
+    "item_type": "grammar",
+    "article": "der",
+    "plural": null,
+    "category": "negation",
+    "notes": "Negates masculine nouns in the accusative (e.g. Ich habe keinen Hunger)"
+  },
+
+  {
+    "german": "wer",
+    "translation": "who?",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "w_questions",
+    "notes": "W-question asking about a person (subject)"
+  },
+  {
+    "german": "was",
+    "translation": "what?",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "w_questions",
+    "notes": "W-question asking about a thing or action"
+  },
+  {
+    "german": "wo",
+    "translation": "where? (location, no movement)",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "w_questions",
+    "notes": "W-question for static location (Wo wohnst du?)"
+  },
+  {
+    "german": "woher",
+    "translation": "where from? (origin)",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "w_questions",
+    "notes": "W-question for origin/provenance (Woher kommst du?)"
+  },
+  {
+    "german": "wohin",
+    "translation": "where to? (direction/movement)",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "w_questions",
+    "notes": "W-question for destination with movement (Wohin fährst du?)"
+  },
+  {
+    "german": "wann",
+    "translation": "when?",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "w_questions",
+    "notes": "W-question for time (Wann beginnt der Kurs?)"
+  },
+  {
+    "german": "wie",
+    "translation": "how?",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "w_questions",
+    "notes": "W-question for manner or state (Wie heißt du? / Wie geht es dir?)"
+  },
+  {
+    "german": "wie viel",
+    "translation": "how much?",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "w_questions",
+    "notes": "W-question for quantity or price (Wie viel kostet das?)"
+  },
+  {
+    "german": "warum",
+    "translation": "why?",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "w_questions",
+    "notes": "W-question for reason/cause (Warum lernst du Deutsch?)"
+  },
+
+  {
+    "german": "null",
+    "translation": "zero (0)",
+    "item_type": "number",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Number 0"
+  },
+  {
+    "german": "eins",
+    "translation": "one (1)",
+    "item_type": "number",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Number 1 (becomes ein before Uhr: ein Uhr)"
+  },
+  {
+    "german": "zwei",
+    "translation": "two (2)",
+    "item_type": "number",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Number 2"
+  },
+  {
+    "german": "drei",
+    "translation": "three (3)",
+    "item_type": "number",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Number 3"
+  },
+  {
+    "german": "vier",
+    "translation": "four (4)",
+    "item_type": "number",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Number 4"
+  },
+  {
+    "german": "fünf",
+    "translation": "five (5)",
+    "item_type": "number",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Number 5"
+  },
+  {
+    "german": "sechs",
+    "translation": "six (6)",
+    "item_type": "number",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Number 6"
+  },
+  {
+    "german": "sieben",
+    "translation": "seven (7)",
+    "item_type": "number",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Number 7"
+  },
+  {
+    "german": "acht",
+    "translation": "eight (8)",
+    "item_type": "number",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Number 8"
+  },
+  {
+    "german": "neun",
+    "translation": "nine (9)",
+    "item_type": "number",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Number 9"
+  },
+  {
+    "german": "zehn",
+    "translation": "ten (10)",
+    "item_type": "number",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Number 10"
+  },
+  {
+    "german": "elf",
+    "translation": "eleven (11)",
+    "item_type": "number",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Number 11"
+  },
+  {
+    "german": "zwölf",
+    "translation": "twelve (12)",
+    "item_type": "number",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Number 12"
+  },
+  {
+    "german": "zwanzig",
+    "translation": "twenty (20)",
+    "item_type": "number",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Number 20 (two-digit numbers 21-99 read ones + und + tens: einundzwanzig)"
+  },
+  {
+    "german": "hundert",
+    "translation": "one hundred (100)",
+    "item_type": "number",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Number 100"
+  },
+  {
+    "german": "Wie spät ist es?",
+    "translation": "What time is it?",
+    "item_type": "phrase",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Standard question to ask the time"
+  },
+  {
+    "german": "halb acht",
+    "translation": "half past seven (7:30)",
+    "item_type": "phrase",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Watch out: halb + next hour in German (halb acht = 7:30, halfway to eight)"
+  },
+  {
+    "german": "Viertel nach",
+    "translation": "quarter past",
+    "item_type": "phrase",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Example: Es ist Viertel nach drei (3:15)"
+  },
+  {
+    "german": "Viertel vor",
+    "translation": "quarter to",
+    "item_type": "phrase",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Example: Es ist Viertel vor fünf (4:45)"
+  },
+  {
+    "german": "um ... Uhr",
+    "translation": "at ... o'clock",
+    "item_type": "grammar",
+    "article": null,
+    "plural": null,
+    "category": "numbers_and_time",
+    "notes": "Time preposition for exact clock times (um acht Uhr)"
+  }
+]
