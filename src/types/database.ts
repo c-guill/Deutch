@@ -61,3 +61,28 @@ export interface UserProgress {
   next_review_at: string;
   last_exercise_type: ExerciseType | null;
 }
+
+export interface UserStats {
+  id: number;
+  xp: number;
+  streak_days: number;
+  last_activity_date: string | null;
+  updated_at: string;
+}
+
+export interface DialogueTurn {
+  speaker: 'Partner' | 'You' | 'Interlocuteur' | 'Moi' | string;
+  text_de: string;
+  text_fr: string;
+  is_user_turn: boolean;
+  blank_target: string | null;
+  distractors: string[];
+}
+
+export interface ThemeDialogue {
+  id: string;
+  theme_id: number;
+  title: string;
+  context: string;
+  turns: DialogueTurn[];
+}

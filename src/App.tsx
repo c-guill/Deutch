@@ -1,15 +1,20 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { AlertTriangle, Loader2, RefreshCw } from 'lucide-react';
+import { AlertTriangle, BookOpen, Compass, Loader2, RefreshCw } from 'lucide-react';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
 import { buildSessionExercises, type SessionExercise } from './lib/srsEngine';
+import { initCloudSync } from './lib/gameState';
 import type { LearningItem, Module, Theme, UserProgress } from './types/database';
 import ThemeMap from './components/ThemeMap';
 import ThemeIntro from './components/ThemeIntro';
 import SessionRunner from './components/SessionRunner';
+import DialogueExercise from './components/DialogueExercise';
+import MonCarnet from './components/MonCarnet';
 
 type Screen =
   | { view: 'map' }
+  | { view: 'notebook' }
   | { view: 'intro'; theme: Theme }
+  | { view: 'dialogue'; theme: Theme }
   | { view: 'session'; title: string; exercises: SessionExercise[]; returnTheme?: Theme };
 
 export default function App() {
@@ -45,6 +50,7 @@ export default function App() {
         supabase.from('learning_items').select('*').range(0, 999),
         supabase.from('learning_items').select('*').range(1000, 2999),
         supabase.from('user_progress').select('*').range(0, 2999),
+        initCloudSync(),
       ]);
 
       if (themesRes.error) throw themesRes.error;
@@ -81,7 +87,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    loadCurriculum(false);
+    void loadCurriculum(false);
   }, [loadCurriculum]);
 
   const dueCount = useMemo(() => {
@@ -154,8 +160,14 @@ export default function App() {
     setScreen({ view: 'session', title: 'Sentence Writing Practice', exercises });
   };
 
+  const showBottomNav = !loading && !error && (screen.view === 'map' || screen.view === 'notebook');
+
   return (
-    <div className="mx-auto flex min-h-[100dvh] w-full max-w-[480px] flex-col bg-white px-4 py-4 text-[#4B4B4B]">
+    <div
+      className={`mx-auto flex min-h-[100dvh] w-full max-w-[480px] flex-col bg-white px-4 py-4 text-[#4B4B4B] ${
+        showBottomNav ? 'pb-24' : ''
+      }`}
+    >
       {loading ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-3 text-[#AFAFAF]">
           <Loader2 className="h-10 w-10 animate-spin text-[#58CC02]" />
@@ -191,11 +203,14 @@ export default function App() {
           onStartModule={(theme, mod, previousModuleIds) =>
             handleStartThemeLesson(theme, mod, previousModuleIds)
           }
+          onStartDialogue={(theme) => setScreen({ view: 'dialogue', theme })}
           onStartReview={handleStartDueReview}
           onStartSentencePractice={handleStartSentencePractice}
           onRefresh={() => loadCurriculum(true)}
           isRefreshing={refreshing}
         />
+      ) : screen.view === 'notebook' ? (
+        <MonCarnet items={items} progressMap={progressMap} />
       ) : screen.view === 'intro' ? (
         <ThemeIntro
           theme={screen.theme}
@@ -215,6 +230,14 @@ export default function App() {
             );
           }}
         />
+      ) : screen.view === 'dialogue' ? (
+        <DialogueExercise
+          theme={screen.theme}
+          onExit={() => {
+            setScreen({ view: 'map' });
+            void loadCurriculum(true);
+          }}
+        />
       ) : (
         <SessionRunner
           title={screen.title}
@@ -227,9 +250,38 @@ export default function App() {
             } else {
               setScreen({ view: 'map' });
             }
-            loadCurriculum(true);
+            void loadCurriculum(true);
           }}
         />
+      )}
+
+      {/* Fixed Bottom Navigation Bar (Path | Notebook) */}
+      {showBottomNav && (
+        <nav
+          aria-label="Main navigation"
+          className="fixed right-0 bottom-0 left-0 z-30 mx-auto flex w-full max-w-[480px] items-center gap-3 border-t-2 border-[#E5E5E5] bg-white px-4 py-2.5"
+        >
+          <button
+            type="button"
+            onClick={() => setScreen({ view: 'map' })}
+            className={`btn-3d !min-h-[46px] flex-1 !rounded-xl !text-xs ${
+              screen.view === 'map' ? 'btn-green' : 'btn-white !text-[#777777]'
+            }`}
+          >
+            <Compass className="h-5 w-5" />
+            <span>Path</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setScreen({ view: 'notebook' })}
+            className={`btn-3d !min-h-[46px] flex-1 !rounded-xl !text-xs ${
+              screen.view === 'notebook' ? 'btn-blue' : 'btn-white !text-[#777777]'
+            }`}
+          >
+            <BookOpen className="h-5 w-5" />
+            <span>My Notebook</span>
+          </button>
+        </nav>
       )}
     </div>
   );

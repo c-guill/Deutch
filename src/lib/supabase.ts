@@ -7,6 +7,8 @@ declare global {
       VITE_SUPABASE_ANON_KEY?: string;
       SUPABASE_URL?: string;
       SUPABASE_ANON_KEY?: string;
+      VITE_GEMINI_API_KEY?: string;
+      VITE_GEMINI_MODEL?: string;
     };
   }
 }

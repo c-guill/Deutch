@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Lightbulb, Sparkles, Volume2, X, Zap } from 'lucide-react';
+import { Lightbulb, Loader2, Sparkles, Volume2, X, Zap } from 'lucide-react';
 import type { UserProgress } from '../types/database';
 import { formatGermanWithArticle, getGenderStyle } from '../lib/gender';
 import { recordProgress, type SessionExercise } from '../lib/srsEngine';
 import { speakGerman, stopSpeaking } from '../lib/speech';
 import { addXp, completeSessionForStreak, playSound } from '../lib/gameState';
+import { explainMistake } from '../lib/gemini';
 import DiscoveryCard from './DiscoveryCard';
 import SessionComplete from './SessionComplete';
 import MatchingExercise, { type ExerciseResult } from './exercises/MatchingExercise';
@@ -41,6 +42,9 @@ export default function SessionRunner({
   const [sessionXp, setSessionXp] = useState(0);
   const [finished, setFinished] = useState(false);
   const [streakInfo, setStreakInfo] = useState({ streak: 0, extendedToday: false });
+  const [aiExplanation, setAiExplanation] = useState<string | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
 
   const gradedTotal = useMemo(
     () => exercises.filter((e) => e.exerciseType !== 'discovery').length,
@@ -87,6 +91,9 @@ export default function SessionRunner({
   const advanceStep = () => {
     stopSpeaking();
     setFeedback(null);
+    setAiExplanation(null);
+    setAiLoading(false);
+    setAiError(null);
     if (currentIndex + 1 >= exercises.length) {
       setStreakInfo(completeSessionForStreak());
       setFinished(true);
@@ -130,6 +137,30 @@ export default function SessionRunner({
     current.exerciseType === 'typing' ||
     current.exerciseType === 'typing_word' ||
     current.exerciseType === 'typing_sentence';
+
+  const supportsAiWhyWrong =
+    isTypingExercise ||
+    current.exerciseType === 'cloze' ||
+    current.exerciseType === 'reorder';
+
+  const handleAskWhyWrong = async () => {
+    if (!feedback || aiLoading || aiExplanation) return;
+    setAiLoading(true);
+    setAiError(null);
+    try {
+      const explanation = await explainMistake({
+        expected: feedback.expectedAnswer,
+        userAnswer: feedback.userAnswer ?? '',
+        sentence: current.item.sentence_de,
+        sentenceTranslation: current.item.sentence_translation,
+      });
+      setAiExplanation(explanation);
+    } catch (err) {
+      setAiError(err instanceof Error ? err.message : 'Unable to fetch AI explanation.');
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   const showAnswer = feedback && (!feedback.isCorrect || !feedback.isExact);
   const isLast = currentIndex + 1 >= exercises.length;
@@ -330,6 +361,41 @@ export default function SessionRunner({
             <div className="flex items-start gap-2 rounded-2xl bg-white/70 p-3 text-xs leading-relaxed font-bold text-[#6B5B00]">
               <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-[#FFC800]" />
               <span>{current.item.grammar_tip}</span>
+            </div>
+          )}
+
+          {!feedback.isCorrect && supportsAiWhyWrong && (
+            <div className="flex flex-col gap-2">
+              {!aiExplanation && (
+                <button
+                  type="button"
+                  disabled={aiLoading}
+                  onClick={handleAskWhyWrong}
+                  className="btn-3d btn-white w-full !min-h-[44px] !rounded-xl !text-xs !text-[#EA2B2B]"
+                >
+                  {aiLoading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>Analyzing your answer...</span>
+                    </>
+                  ) : (
+                    <span>💡 Why is this wrong?</span>
+                  )}
+                </button>
+              )}
+
+              {aiExplanation && (
+                <div className="animate-fade-in rounded-2xl border-2 border-[#FFB3B3] bg-white p-3 text-xs leading-relaxed font-bold text-[#4B4B4B]">
+                  <p className="mb-1 text-[10px] font-black tracking-wider text-[#EA2B2B] uppercase">
+                    💡 AI Grammar Explanation
+                  </p>
+                  <p>{aiExplanation}</p>
+                </div>
+              )}
+
+              {aiError && (
+                <p className="text-center text-xs font-bold text-[#EA2B2B]">{aiError}</p>
+              )}
             </div>
           )}
 

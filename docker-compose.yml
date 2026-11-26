@@ -11,6 +11,8 @@ services:
       VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:-}
       SUPABASE_URL: ${SUPABASE_URL:-}
       SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY:-}
+      VITE_GEMINI_API_KEY: ${VITE_GEMINI_API_KEY:-}
+      VITE_GEMINI_MODEL: ${VITE_GEMINI_MODEL:-}
     expose:
       - "80"
     restart: unless-stopped

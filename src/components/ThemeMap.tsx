@@ -1,4 +1,4 @@
-import { Flame, PenLine, RefreshCw, Volume2, VolumeX, Zap, BookOpen } from 'lucide-react';
+import { Flame, PenLine, RefreshCw, Volume2, VolumeX, Zap, BookOpen, MessageCircle, Trophy } from 'lucide-react';
 import type { LearningItem, Module, Theme, UserProgress } from '../types/database';
 import { effectiveStreak, setSoundOn, useGameState } from '../lib/gameState';
 
@@ -11,6 +11,7 @@ interface ThemeMapProps {
   sentencePracticeCount: number;
   onSelectTheme: (theme: Theme) => void;
   onStartModule: (theme: Theme, module: Module, previousModuleIds: string[]) => void;
+  onStartDialogue: (theme: Theme) => void;
   onStartReview: () => void;
   onStartSentencePractice: () => void;
   onRefresh: () => void;
@@ -87,6 +88,7 @@ export default function ThemeMap({
   sentencePracticeCount,
   onSelectTheme,
   onStartModule,
+  onStartDialogue,
   onStartReview,
   onStartSentencePractice,
   onRefresh,
@@ -206,13 +208,15 @@ export default function ThemeMap({
         </button>
       )}
 
-      {/* Themes: chapter banner + winding module path */}
+      {/* Themes: chapter banner + winding module path + recap dialogue */}
       {themeSections.map(({ theme, themeIdx, themeItems, acquired, moduleStats }) => {
         const themePercent = themeItems.length > 0 ? Math.round((acquired / themeItems.length) * 100) : 0;
         const themeComplete = themeItems.length > 0 && acquired === themeItems.length;
         const completedModules = moduleStats.filter((m) => m.isComplete).length;
+        const dialogueDone = game.dialoguesDone.includes(theme.id);
+        const totalNodes = moduleStats.length + 1; // modules + final recap dialogue step
 
-        const centers = moduleStats.map((_, i) => ({
+        const centers = Array.from({ length: totalNodes }, (_, i) => ({
           x: X_POSITIONS[i % X_POSITIONS.length],
           y: i * ROW_HEIGHT + 44,
         }));
@@ -224,6 +228,8 @@ export default function ThemeMap({
             return `C ${p.x} ${midY}, ${c.x} ${midY}, ${c.x} ${c.y}`;
           })
           .join(' ');
+        const dialogueIdx = moduleStats.length;
+        const dialogueX = X_POSITIONS[dialogueIdx % X_POSITIONS.length];
 
         return (
           <section key={theme.id} className="flex flex-col gap-3">
@@ -273,12 +279,12 @@ export default function ThemeMap({
               </span>
             </button>
 
-            {/* Module winding path */}
+            {/* Module winding path + final Recap Dialogue node */}
             {moduleStats.length > 0 && (
-              <div className="relative" style={{ height: moduleStats.length * ROW_HEIGHT }}>
+              <div className="relative" style={{ height: totalNodes * ROW_HEIGHT }}>
                 <svg
                   className="absolute inset-0 h-full w-full"
-                  viewBox={`0 0 100 ${moduleStats.length * ROW_HEIGHT}`}
+                  viewBox={`0 0 100 ${totalNodes * ROW_HEIGHT}`}
                   preserveAspectRatio="none"
                   aria-hidden="true"
                 >
@@ -344,6 +350,37 @@ export default function ThemeMap({
                     </div>
                   );
                 })}
+
+                {/* Special Recap Dialogue step at the end of the theme */}
+                <div
+                  className="absolute flex w-44 -translate-x-1/2 flex-col items-center"
+                  style={{ left: `${dialogueX}%`, top: dialogueIdx * ROW_HEIGHT }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => onStartDialogue(theme)}
+                    className="relative h-[82px] w-[82px] transition active:scale-95"
+                    aria-label={`${theme.title} — Recap Dialogue`}
+                  >
+                    <ProgressRing percent={dialogueDone ? 100 : themePercent} complete={dialogueDone} />
+                    <span
+                      className={`absolute inset-[8px] flex items-center justify-center rounded-full border-b-[5px] text-white ${
+                        dialogueDone
+                          ? 'border-[#E5A500] bg-[#FFC800]'
+                          : 'border-[#1899D6] bg-[#1CB0F6]'
+                      }`}
+                    >
+                      {dialogueDone ? <Trophy className="h-7 w-7" /> : <MessageCircle className="h-7 w-7" />}
+                    </span>
+                  </button>
+
+                  <p className="mt-1 text-center text-xs leading-tight font-black text-[#4B4B4B]">
+                    💬 Recap Dialogue
+                  </p>
+                  <p className="text-[10px] font-bold text-[#E5A500]">
+                    {dialogueDone ? '★ Completed · +20 XP' : '+20 XP reward'}
+                  </p>
+                </div>
               </div>
             )}
           </section>
