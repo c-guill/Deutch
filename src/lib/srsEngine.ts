@@ -411,11 +411,12 @@ function scheduleWithDiscovery(
 export function buildSessionExercises(params: {
   mode: 'theme' | 'review' | 'sentence_practice';
   themeId?: number;
+  moduleId?: string;
   allItems: LearningItem[];
   progressMap: Map<string, UserProgress>;
   sessionSize?: number;
 }): SessionExercise[] {
-  const { mode, themeId, allItems, progressMap, sessionSize = 10 } = params;
+  const { mode, themeId, moduleId, allItems, progressMap, sessionSize = 10 } = params;
   const now = Date.now();
 
   const isDue = (item: LearningItem): boolean => {
@@ -467,8 +468,12 @@ export function buildSessionExercises(params: {
 
     selected = dueItems.map((item) => ({ item, isReview: true }));
   } else {
-    const themeItems = allItems.filter((it) => it.theme_id === themeId);
-    const otherDueItems = allItems.filter((it) => it.theme_id !== themeId && isDue(it));
+    const themeItems = moduleId
+      ? allItems.filter((it) => it.module_id === moduleId)
+      : allItems.filter((it) => it.theme_id === themeId);
+    const otherDueItems = allItems.filter(
+      (it) => (moduleId ? it.module_id !== moduleId : it.theme_id !== themeId) && isDue(it)
+    );
 
     // Target ~30% due reviews (up to 3 out of 10) from previous themes
     const reviewTarget = Math.min(Math.round(sessionSize * 0.3), otherDueItems.length);

@@ -1,9 +1,10 @@
 import { Flame, PenLine, RefreshCw, Volume2, VolumeX, Zap, Sparkles } from 'lucide-react';
-import type { LearningItem, Theme, UserProgress } from '../types/database';
+import type { LearningItem, Module, Theme, UserProgress } from '../types/database';
 import { effectiveStreak, setSoundOn, useGameState } from '../lib/gameState';
 
 interface ThemeMapProps {
   themes: Theme[];
+  modules: Module[];
   items: LearningItem[];
   progressMap: Map<string, UserProgress>;
   dueCount: number;
@@ -74,6 +75,7 @@ function ProgressRing({ percent, complete }: { percent: number; complete: boolea
 
 export default function ThemeMap({
   themes,
+  modules,
   items,
   progressMap,
   dueCount,
@@ -93,10 +95,23 @@ export default function ThemeMap({
 
   const stats = themes.map((theme) => {
     const themeItems = items.filter((it) => it.theme_id === theme.id);
+    const themeModules = modules.filter((m) => m.theme_id === theme.id);
     const count = themeItems.length;
     const started = themeItems.filter((it) => (progressMap.get(it.id)?.repetitions ?? 0) > 0).length;
+    const completedModules = themeModules.filter((m) => {
+      const mItems = themeItems.filter((it) => it.module_id === m.id);
+      return mItems.length > 0 && mItems.every((it) => (progressMap.get(it.id)?.repetitions ?? 0) > 0);
+    }).length;
     const percent = count > 0 ? Math.round((started / count) * 100) : 0;
-    return { theme, count, started, percent, isComplete: count > 0 && percent === 100 };
+    return {
+      theme,
+      count,
+      started,
+      moduleCount: themeModules.length,
+      completedModules,
+      percent,
+      isComplete: count > 0 && percent === 100,
+    };
   });
 
   const activeIndex = stats.findIndex((s) => s.count > 0 && !s.isComplete);
@@ -223,7 +238,7 @@ export default function ThemeMap({
             />
           </svg>
 
-          {stats.map(({ theme, count, started, percent, isComplete }, i) => {
+          {stats.map(({ theme, count, started, moduleCount, completedModules, percent, isComplete }, i) => {
             const isActive = i === activeIndex;
             const x = X_POSITIONS[i % X_POSITIONS.length];
             const bubbleColor = isComplete
@@ -237,7 +252,7 @@ export default function ThemeMap({
             return (
               <div
                 key={theme.id}
-                className="absolute flex w-32 -translate-x-1/2 flex-col items-center"
+                className="absolute flex w-36 -translate-x-1/2 flex-col items-center"
                 style={{ left: `${x}%`, top: i * ROW_HEIGHT }}
               >
                 {isActive && (
@@ -271,7 +286,8 @@ export default function ThemeMap({
                   {theme.title}
                 </p>
                 <p className="flex items-center gap-1 text-[10px] font-bold text-[#AFAFAF]">
-                  {percent}% · {count} words
+                  {moduleCount > 0 ? `${completedModules}/${moduleCount} modules · ` : ''}
+                  {count} words
                   {count > 0 && started > 0 && started < count && <Sparkles className="h-3 w-3 text-[#FFC800]" />}
                 </p>
               </div>

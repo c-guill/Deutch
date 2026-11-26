@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AlertTriangle, Loader2, RefreshCw } from 'lucide-react';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
 import { buildSessionExercises, type SessionExercise } from './lib/srsEngine';
-import type { LearningItem, Theme, UserProgress } from './types/database';
+import type { LearningItem, Module, Theme, UserProgress } from './types/database';
 import ThemeMap from './components/ThemeMap';
 import ThemeIntro from './components/ThemeIntro';
 import SessionRunner from './components/SessionRunner';
@@ -10,10 +10,11 @@ import SessionRunner from './components/SessionRunner';
 type Screen =
   | { view: 'map' }
   | { view: 'intro'; theme: Theme }
-  | { view: 'session'; title: string; exercises: SessionExercise[] };
+  | { view: 'session'; title: string; exercises: SessionExercise[]; returnTheme?: Theme };
 
 export default function App() {
   const [themes, setThemes] = useState<Theme[]>([]);
+  const [modules, setModules] = useState<Module[]>([]);
   const [items, setItems] = useState<LearningItem[]>([]);
   const [progressMap, setProgressMap] = useState<Map<string, UserProgress>>(() => new Map());
   const [loading, setLoading] = useState(true);
@@ -33,8 +34,14 @@ export default function App() {
     setError(null);
 
     try {
-      const [themesRes, itemsPage1, itemsPage2, progressRes] = await Promise.all([
+      const [themesRes, modulesRes, itemsPage1, itemsPage2, progressRes] = await Promise.all([
         supabase.from('themes').select('*').order('order_index', { ascending: true }),
+        supabase
+          .from('modules')
+          .select('*')
+          .order('theme_id', { ascending: true })
+          .order('order_index', { ascending: true })
+          .range(0, 999),
         supabase.from('learning_items').select('*').range(0, 999),
         supabase.from('learning_items').select('*').range(1000, 2999),
         supabase.from('user_progress').select('*').range(0, 2999),
@@ -46,6 +53,9 @@ export default function App() {
       if (progressRes.error) throw progressRes.error;
 
       setThemes((themesRes.data as Theme[]) ?? []);
+      if (!modulesRes.error) {
+        setModules((modulesRes.data as Module[]) ?? []);
+      }
       setItems([
         ...((itemsPage1.data as LearningItem[]) ?? []),
         ...((itemsPage2.data as LearningItem[]) ?? []),
@@ -108,15 +118,19 @@ export default function App() {
     });
   }, []);
 
-  const handleStartThemeLesson = (theme: Theme) => {
+  const handleStartThemeLesson = (theme: Theme, mod?: Module) => {
     const exercises = buildSessionExercises({
       mode: 'theme',
       themeId: theme.id,
+      moduleId: mod?.id,
       allItems: items,
       progressMap,
       sessionSize: 10,
     });
-    setScreen({ view: 'session', title: theme.title, exercises });
+    const sessionTitle = mod
+      ? `${theme.title} · ${String(mod.order_index).padStart(2, '0')}. ${mod.title}`
+      : theme.title;
+    setScreen({ view: 'session', title: sessionTitle, exercises, returnTheme: theme });
   };
 
   const handleStartDueReview = () => {
@@ -167,6 +181,7 @@ export default function App() {
       ) : screen.view === 'map' ? (
         <ThemeMap
           themes={themes}
+          modules={modules}
           items={items}
           progressMap={progressMap}
           dueCount={dueCount}
@@ -180,10 +195,11 @@ export default function App() {
       ) : screen.view === 'intro' ? (
         <ThemeIntro
           theme={screen.theme}
+          themeModules={modules.filter((m) => m.theme_id === screen.theme.id)}
           themeItems={items.filter((it) => it.theme_id === screen.theme.id)}
           progressMap={progressMap}
           onBack={() => setScreen({ view: 'map' })}
-          onStartLesson={() => handleStartThemeLesson(screen.theme)}
+          onStartLesson={(mod) => handleStartThemeLesson(screen.theme, mod)}
         />
       ) : (
         <SessionRunner
@@ -192,7 +208,11 @@ export default function App() {
           progressMap={progressMap}
           onProgressUpdated={handleProgressUpdated}
           onExit={() => {
-            setScreen({ view: 'map' });
+            if (screen.returnTheme) {
+              setScreen({ view: 'intro', theme: screen.returnTheme });
+            } else {
+              setScreen({ view: 'map' });
+            }
             loadCurriculum(true);
           }}
         />

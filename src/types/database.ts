@@ -6,6 +6,14 @@ export interface Theme {
   grammar_focus: string;
 }
 
+export interface Module {
+  id: string;
+  theme_id: number;
+  order_index: number;
+  title: string;
+  description: string;
+}
+
 export type LearningItemType =
   | 'noun'
   | 'verb'
@@ -22,6 +30,7 @@ export type LearningItemType =
 export interface LearningItem {
   id: string;
   theme_id: number;
+  module_id?: string | null;
   item_type: LearningItemType | string;
   german: string;
   translation: string;
